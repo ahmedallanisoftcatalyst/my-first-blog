@@ -58,9 +58,9 @@ class FeedbackFormView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        subject = "Feedback from " + form.cleaned_data['name']
+        subject = "Feedback from " + form.cleaned_data['name'] 
         from_email = form.cleaned_data['email']
-        message = form.cleaned_data['feedback']
+        message =   form.cleaned_data['feedback'] + "\nEmail:" + form.cleaned_data['email']
         try:
             send_mail(subject, message, from_email, ['ahmed.allani@softcatalyst.com'])
         except BadHeaderError:
