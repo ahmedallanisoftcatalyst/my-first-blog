@@ -10,15 +10,22 @@
 .page-header .title a:visited,
 .page-header .title a:active {
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 28pt;
     text-decoration: none;
 }
-
+.link a{
+    color: #ffffff!important;
+    font-size: 24pt;
+    text-decoration: none;
+}
+.link  {
+    padding: 10px;
+}
 h1,
 h2,
 h3,
 h4,
-.title {
+.link {
     font-family: 'Lobster', cursive;
 }
 

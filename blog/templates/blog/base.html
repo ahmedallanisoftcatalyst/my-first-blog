@@ -25,11 +25,11 @@
           {% include './icons/file-earmark-plus.svg' %}
         </a>
         {% endif %}
-        <div style="display: flex">
-          <div class="title">
+        <div style="display: flex;align-items: center;">
+          <div class="link title">
             <a href="{% url 'post_list' %}">Django Girls Blog</a>
           </div>
-          <div class="title"><a href="{% url 'feedback' %}">Feedback</a></div>
+          <div class="link"><a href="{% url 'feedback' %}">Feedback</a></div>
         </div>
       </div>
     </header>

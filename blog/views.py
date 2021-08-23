@@ -1,8 +1,10 @@
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import  redirect
+from django.core.mail import send_mail, BadHeaderError
 from django.views import generic
 from django.urls import reverse
 from django.views.generic.edit import FormView
+from django.http import HttpResponse
 from .models import Post
 from .forms import FeedbackForm, PostForm
 class PostList(generic.ListView):
@@ -56,5 +58,12 @@ class FeedbackFormView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.send_email()
+        subject = "Feedback from " + form.cleaned_data['name']
+        from_email = form.cleaned_data['email']
+        message = form.cleaned_data['feedback']
+        try:
+            send_mail(subject, message, from_email, ['ahmed.allani@softcatalyst.com'])
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+
         return super().form_valid(form)
