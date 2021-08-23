@@ -2,8 +2,9 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.urls import reverse
+from django.views.generic.edit import FormView
 from .models import Post
-from .forms import PostForm
+from .forms import FeedbackForm, PostForm
 class PostList(generic.ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
@@ -45,4 +46,15 @@ class PostUpdate(generic.UpdateView):
         post.published_date = timezone.now()
         post.save()
         self.object = form.save()
+        return super().form_valid(form)
+
+class FeedbackFormView(FormView):
+    template_name = 'blog/feedback.html'
+    form_class = FeedbackForm
+    success_url = "/thanks/"
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
         return super().form_valid(form)
