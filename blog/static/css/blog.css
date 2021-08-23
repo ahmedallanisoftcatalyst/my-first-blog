@@ -5,19 +5,27 @@
     padding: 20px 20px 20px 40px;
 }
 
-.page-header h1,
-.page-header h1 a,
-.page-header h1 a:visited,
-.page-header h1 a:active {
+.page-header .title,
+.page-header .title a,
+.page-header .title a:visited,
+.page-header .title a:active {
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 28pt;
     text-decoration: none;
 }
-
+.link a{
+    color: #ffffff!important;
+    font-size: 24pt;
+    text-decoration: none;
+}
+.link  {
+    padding: 10px;
+}
 h1,
 h2,
 h3,
-h4 {
+h4,
+.link {
     font-family: 'Lobster', cursive;
 }
 
