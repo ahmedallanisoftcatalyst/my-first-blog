@@ -9,11 +9,13 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import environ
 
 env = environ.Env()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,7 +28,6 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="syRv8cHUFelftIRrBzSOqihPRFBvZMtiX5sUpn1PcobCv9k4Rxm6doXicKAHOSer",
 )
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
