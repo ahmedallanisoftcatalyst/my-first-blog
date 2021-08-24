@@ -1,5 +1,5 @@
 from django.utils import timezone
-from django.shortcuts import  redirect
+from django.conf import settings
 from django.core.mail import send_mail, BadHeaderError
 from django.views import generic
 from django.urls import reverse
@@ -62,7 +62,7 @@ class FeedbackFormView(FormView):
         from_email = form.cleaned_data['email']
         message =   form.cleaned_data['feedback'] + "\nEmail:" + form.cleaned_data['email']
         try:
-            send_mail(subject, message, from_email, ['ahmed.allani@softcatalyst.com'])
+            send_mail(subject, message, from_email, settings.EMAIL_ADMINS)
         except BadHeaderError:
             return HttpResponse('Invalid header found.')
 
