@@ -9,12 +9,12 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'text',)
 
-email_validator = RegexValidator(
+email_softcatalyst_validator = RegexValidator(
     regex='@softcatalyst\.com$',
     message='Email is invalid. The email should be a softcatalyst email',
     code='invalid_email',
 )
 class FeedbackForm(forms.Form):
     name = forms.CharField(label='Your name', max_length=100, required=True)
-    email = forms.CharField(label='Your email', max_length=100, required=True,validators=[email_validator])
+    email = forms.EmailField(label='Your email', max_length=100, required=True,validators=[email_softcatalyst_validator])
     feedback = forms.CharField(label='Your feedback', widget=forms.Textarea, required=True)
