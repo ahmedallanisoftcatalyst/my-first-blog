@@ -7,6 +7,11 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponse
 from .models import Post
 from .forms import FeedbackForm, PostForm
+from django.http import JsonResponse
+import json
+from django.template.loader import render_to_string
+
+
 class PostList(generic.ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
@@ -18,14 +23,17 @@ class PostList(generic.ListView):
 
 class PostDetail(generic.DetailView):
     model = Post
-    template_name = 'blog/post_detail.html'
+    template_name = 'blog/post_detail_page.html'
+
 
 class PostCreate(generic.CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
+
     def get_success_url(self):
-        return reverse('post_detail',args=(self.object.id,))
+        return reverse('post_detail', args=(self.object.id,))
+
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         post = form.save(commit=False)
@@ -35,12 +43,18 @@ class PostCreate(generic.CreateView):
         self.object = form.save()
         return super().form_valid(form)
 
+
 class PostUpdate(generic.UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
-    def get_success_url(self):
-        return reverse('post_detail',args=(self.object.id,))
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        data = {}
+        data['html'] = response.rendered_content
+        return JsonResponse(data)
+
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         post = form.save(commit=False)
@@ -48,7 +62,18 @@ class PostUpdate(generic.UpdateView):
         post.published_date = timezone.now()
         post.save()
         self.object = form.save()
-        return super().form_valid(form)
+        data = {'form_is_valid': True}
+        data['html'] = render_to_string(
+            'blog/post_detail.html', {'post': self.object}, request=self.request)
+        return JsonResponse(data)
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        response = super().form_invalid(form) 
+        data = {'form_is_valid': False}
+        data['html'] = response.rendered_content
+        return JsonResponse(data)
+
 
 class FeedbackFormView(FormView):
     template_name = 'blog/feedback.html'
@@ -58,9 +83,10 @@ class FeedbackFormView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        subject = "Feedback from " + form.cleaned_data['name'] 
+        subject = "Feedback from " + form.cleaned_data['name']
         from_email = form.cleaned_data['email']
-        message =   form.cleaned_data['feedback'] + "\nEmail:" + form.cleaned_data['email']
+        message = form.cleaned_data['feedback'] + \
+            "\nEmail:" + form.cleaned_data['email']
         try:
             send_mail(subject, message, from_email, settings.EMAIL_ADMINS)
         except BadHeaderError:
