@@ -22,7 +22,7 @@ var PostForm = function (form, callback) {
   });
   return false;
 };
-var SaveForm = function () {
+var SaveForm = function (evt) {
   evt.preventDefault();
   var form = $(this);
   PostForm(form, function (data) {
