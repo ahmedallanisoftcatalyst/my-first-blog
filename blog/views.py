@@ -81,8 +81,8 @@ class PostDelete(generic.DeleteView):
         data = {}
         data['html'] = response.rendered_content
         return JsonResponse(data)
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
         data = {'form_is_valid': True}
         return JsonResponse(data)
 class FeedbackFormView(FormView):
