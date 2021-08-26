@@ -1,13 +1,13 @@
 {% extends 'blog/base.html' %} 
 {% block content %} 
 {% for post in posts %}
-<article class="post">
+<article class="post" id="post{{post.pk}}">
   <aside class="actions">
     {% if user.is_authenticated %}
     <!-- Button trigger modal -->
     <button
       class="btn btn-default show-form"
-      data-url="{% url 'post_edit' pk=post.pk %}"
+      data-url="{% url 'post_delete' pk=post.pk %}"
       data-toggle="modal"
       data-target="#myModal"
     >

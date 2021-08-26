@@ -1,4 +1,14 @@
-
+.delete-form {
+  text-align: center;
+}
+.delete-form .actions {
+  display: flex;
+  justify-content: center;
+}
+.delete-form .actions button {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
 .page-header {
   background-color: #c25100;

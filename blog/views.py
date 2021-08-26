@@ -2,15 +2,13 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.mail import send_mail, BadHeaderError
 from django.views import generic
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView
 from django.http import HttpResponse
 from .models import Post
 from .forms import FeedbackForm, PostForm
 from django.http import JsonResponse
-import json
 from django.template.loader import render_to_string
-
 
 class PostList(generic.ListView):
     template_name = 'blog/post_list.html'
@@ -29,7 +27,7 @@ class PostDetail(generic.DetailView):
 class PostCreate(generic.CreateView):
     model = Post
     form_class = PostForm
-    template_name = 'blog/post_edit.html'
+    template_name = 'blog/post_create.html'
 
     def get_success_url(self):
         return reverse('post_detail', args=(self.object.id,))
@@ -74,7 +72,19 @@ class PostUpdate(generic.UpdateView):
         data['html'] = response.rendered_content
         return JsonResponse(data)
 
-
+class PostDelete(generic.DeleteView):
+    model = Post
+    template_name = 'blog/post_delete.html'
+    success_url = reverse_lazy('post_list')
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        data = {}
+        data['html'] = response.rendered_content
+        return JsonResponse(data)
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        data = {'form_is_valid': True}
+        return JsonResponse(data)
 class FeedbackFormView(FormView):
     template_name = 'blog/feedback.html'
     form_class = FeedbackForm
